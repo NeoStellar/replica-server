@@ -1,0 +1,254 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample swagger for Fiber",
+        "title": "Fiber Example API",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "email": "fiber@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "127.0.0.1:3000",
+    "basePath": "/",
+    "paths": {
+        "/api/giris": {
+            "post": {
+                "description": "Status Code'lar kesin olarak bu şekilde, 200 dönütünde aldığımız obje farklı olabilir (!)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "giris"
+                ],
+                "summary": "Giriş Yapmak için kullanılır",
+                "parameters": [
+                    {
+                        "description": "Giriş Bilgileri",
+                        "name": "AuthObject",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/giris.AuthObject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/giris.girisResult200"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/giris.girisResult500"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sunucusaati": {
+            "get": {
+                "description": "Sunucu saatini sorgulamak için kullanılır",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "sunucu saati"
+                ],
+                "summary": "Sunucu Saatini Gönderir",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/sunucusaati.ServerTime"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/telemetri_gonder": {
+            "post": {
+                "description": "Hava aracının bilgilerini anlık olarak sunucuya göndermek ve diğer takımların bilgilerini almak için kullanılır",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Telemetri Gönder"
+                ],
+                "summary": "Telemetri Göndermek için kullanılır",
+                "parameters": [
+                    {
+                        "description": "Telemetri Bilgileri",
+                        "name": "TelemetryData",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/telemetri_gonder.TelemetryData"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/telemetri_gonder.TelemetryDataResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "giris.AuthObject": {
+            "type": "object",
+            "properties": {
+                "kadi": {
+                    "type": "string"
+                },
+                "sifre": {
+                    "type": "string"
+                }
+            }
+        },
+        "giris.girisResult200": {
+            "type": "object",
+            "properties": {
+                "takim_no": {
+                    "type": "string"
+                }
+            }
+        },
+        "giris.girisResult500": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "sunucusaati.ServerTime": {
+            "type": "object",
+            "properties": {
+                "dakika": {
+                    "type": "integer"
+                },
+                "gun": {
+                    "type": "integer"
+                },
+                "milisaniye": {
+                    "type": "integer"
+                },
+                "saat": {
+                    "type": "integer"
+                },
+                "saniye": {
+                    "type": "integer"
+                }
+            }
+        },
+        "telemetri_gonder.TelemetryData": {
+            "type": "object",
+            "properties": {
+                "gps_saati": {
+                    "type": "object",
+                    "properties": {
+                        "dakika": {
+                            "type": "integer"
+                        },
+                        "milisaniye": {
+                            "type": "integer"
+                        },
+                        "saat": {
+                            "type": "integer"
+                        },
+                        "saniye": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "hedef_genislik": {
+                    "type": "integer"
+                },
+                "hedef_merkez_X": {
+                    "type": "integer"
+                },
+                "hedef_merkez_Y": {
+                    "type": "integer"
+                },
+                "hedef_yukseklik": {
+                    "type": "integer"
+                },
+                "iha_batarya": {
+                    "type": "integer"
+                },
+                "iha_boylam": {
+                    "type": "number"
+                },
+                "iha_dikilme": {
+                    "type": "integer"
+                },
+                "iha_enlem": {
+                    "type": "number"
+                },
+                "iha_hiz": {
+                    "type": "integer"
+                },
+                "iha_irtifa": {
+                    "type": "integer"
+                },
+                "iha_kilitlenme": {
+                    "type": "integer"
+                },
+                "iha_otonom": {
+                    "type": "integer"
+                },
+                "iha_yatis": {
+                    "type": "integer"
+                },
+                "iha_yonelme": {
+                    "type": "integer"
+                },
+                "takim_numarasi": {
+                    "type": "integer"
+                }
+            }
+        },
+        "telemetri_gonder.TelemetryDataResponse": {
+            "type": "object",
+            "properties": {
+                "konumBilgileri": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/telemetri_gonder.TelemetryData"
+                    }
+                },
+                "sunucusaati": {
+                    "$ref": "#/definitions/sunucusaati.ServerTime"
+                }
+            }
+        }
+    }
+}
