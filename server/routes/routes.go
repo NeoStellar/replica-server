@@ -19,5 +19,5 @@ func init() {
 }
 
 func mainRoute(c *fiber.Ctx) error {
-	return c.SendString("Hello, TFTS 👋!")
+	return c.SendString("Hello, Neostellar 👋!")
 }
