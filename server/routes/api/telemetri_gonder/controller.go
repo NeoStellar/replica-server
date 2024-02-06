@@ -12,7 +12,7 @@ import (
 //
 //	@Summary      Telemetri Göndermek için kullanılır
 //	@Description  Hava aracının bilgilerini anlık olarak sunucuya göndermek ve diğer takımların bilgilerini almak için kullanılır
-//	@Tags         Telemetri Gönder
+//	@Tags         API
 //	@Accept       json
 //	@Produce      json
 //	@Param        TelemetryData body TelemetryData true "Telemetri Bilgileri"

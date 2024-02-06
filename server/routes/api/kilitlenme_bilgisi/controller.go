@@ -8,7 +8,7 @@ import (
 //
 //	@Summary      	Kilitlenme Bilgisi Gönderir
 //	@Description  	Takımlar gerçekleştirdikleri her başarılı kilitlenmenin ardından sunucuya kilitlenme bilgisi göndermelidir
-//	@Tags			kilitlenme bilgisi
+//	@Tags			API
 //	@Param			KilitlenmeVerisi 	body	LockInfo	true	"Örnek Kilitlenme Verisi"
 //	@Accept       	json
 //	@Produce      	json

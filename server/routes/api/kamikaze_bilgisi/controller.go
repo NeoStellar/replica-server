@@ -8,7 +8,7 @@ import (
 //
 //	@Summary      	Kilitlenme Bilgisi Gönderir
 //	@Description  	Takımlar gerçekleştirdikleri başarılı kamikaze görevi ardından sunucuya kamikaze bilgisi göndermelidir.
-//	@Tags			Kamikaze Bilgisi
+//	@Tags			API
 //	@Param			KamikazeVerisi 	body	KamikazeData	true	"Örnek Kamikaze Verisi"
 //	@Accept       	json
 //	@Produce      	json

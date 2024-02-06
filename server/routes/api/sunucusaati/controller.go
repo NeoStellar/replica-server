@@ -8,7 +8,7 @@ import (
 //
 //	@Summary      Sunucu Saatini Gönderir
 //	@Description  Sunucu saatini sorgulamak için kullanılır
-//	@Tags         sunucu saati
+//	@Tags         API
 //	@Accept       json
 //	@Produce      json
 //	@Success      200  {object}  ServerTime

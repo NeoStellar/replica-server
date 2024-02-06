@@ -10,7 +10,7 @@ func init() {
 	router.Get("/", sendLockInfo)
 }
 
-type QrKoordinati struct {
+type QrCoordinates struct {
 	QrEnlem  float64 `json:"qrEnlem" bson:"qrEnlem"`
 	QrBoylam float64 `json:"qrBoylam" bson:"qrBoylam"`
 }
