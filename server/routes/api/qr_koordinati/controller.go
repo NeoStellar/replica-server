@@ -15,7 +15,7 @@ import (
 //	@Router       	/api/qr_koordinati [get]
 func sendLockInfo(c *fiber.Ctx) error {
 	return c.JSON(QrCoordinates{
-		QrEnlem:  0.0,
-		QrBoylam: 0.0,
+		QrEnlem:  39.970612,
+		QrBoylam: 32.630087,
 	})
 }
