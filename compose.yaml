@@ -1,0 +1,7 @@
+services:
+  neostellar:
+    build: "."
+    restart: always
+    ports:
+      - 127.0.0.1:8080:9080
+    network_mode: "host"
