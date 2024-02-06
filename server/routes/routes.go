@@ -3,6 +3,9 @@ package routes
 import (
 	"iharacee/server"
 	_ "iharacee/server/routes/api/giris"
+	_ "iharacee/server/routes/api/kamikaze_bilgisi"
+	_ "iharacee/server/routes/api/kilitlenme_bilgisi"
+	_ "iharacee/server/routes/api/qr_koordinati"
 	_ "iharacee/server/routes/api/sunucusaati"
 	_ "iharacee/server/routes/api/telemetri_gonder"
 
