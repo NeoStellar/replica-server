@@ -7,9 +7,9 @@ import (
 // /api/kamikaze_bilgisi
 //
 //	@Summary      	Kilitlenme Bilgisi Gönderir
-//	@Description  	Takımlar gerçekleştirdikleri her başarılı kilitlenmenin ardından sunucuya kilitlenme bilgisi göndermelidir
-//	@Tags			kilitlenme bilgisi
-//	@Param			KilitlenmeVerisi 	body	LockInfo	true	"Örnek Kilitlenme Verisi"
+//	@Description  	Takımlar gerçekleştirdikleri başarılı kamikaze görevi ardından sunucuya kamikaze bilgisi göndermelidir.
+//	@Tags			Kamikaze Bilgisi
+//	@Param			KamikazeVerisi 	body	KamikazeData	true	"Örnek Kamikaze Verisi"
 //	@Accept       	json
 //	@Produce      	json
 //	@Success      	200
