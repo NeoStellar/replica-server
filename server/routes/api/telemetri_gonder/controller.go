@@ -1,6 +1,7 @@
 package telemetri_gonder
 
 import (
+	"encoding/json"
 	"iharacee/server"
 	"iharacee/server/routes/api/sunucusaati"
 	"log"
@@ -21,6 +22,7 @@ import (
 //	@Router       /api/telemetri_gonder [post]
 func SendTelemetryData(ctx *fiber.Ctx) error {
 	var requestBody TelemetryData
+	var takimData server.UserData
 	if err := ctx.BodyParser(&requestBody); err != nil {
 		return ctx.SendStatus(400)
 	}
@@ -28,7 +30,13 @@ func SendTelemetryData(ctx *fiber.Ctx) error {
 	if err != nil {
 		log.Println(err)
 	}
-	takim_no := sess.Get("takim_no").(int64)
+	takim := sess.Get("takim")
+	if err := json.Unmarshal([]byte(takim.(string)), &takimData); err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"message": "parseError: " + err.Error(),
+		})
+	}
+	takim_no := takimData.Takim_no
 	if requestBody.Takim_numarasi != takim_no {
 		return ctx.SendStatus(400)
 	}

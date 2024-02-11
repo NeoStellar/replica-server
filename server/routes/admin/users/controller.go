@@ -50,7 +50,7 @@ func createUser(ctx *fiber.Ctx) error {
 
 func getUsers(ctx *fiber.Ctx) error {
 	var users []server.UserData
-	cursor, err := server.UserCollection.Find(ctx.Context(), nil)
+	cursor, err := server.UserCollection.Find(ctx.Context(), bson.D{})
 	if err != nil {
 		log.Println(err)
 		return ctx.SendStatus(500)
