@@ -29,7 +29,7 @@ func init() {
 	JWT_SECRET_KEY = os.Getenv("JWT_SECRET_KEY")
 	PORT = os.Getenv("PORT")
 	if len(PORT) == 0 {
-		PORT = ":3000"
+		PORT = ":9080"
 	}
 }
 
