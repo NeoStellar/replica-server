@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"encoding/json"
 	"log"
 	"strings"
@@ -15,18 +14,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-type FormT struct {
+type UserData struct {
 	ID       string   `json:"id,omitempty" bson:"_id,omitempty"`
-	Username string   `json:"username" bson:"username"`
-	Password string   `json:"password" bson:"password"`
+	Username string   `json:"kadi" bson:"kadi"`
+	Password string   `json:"sifre" bson:"sifre"`
 	Roles    []string `json:"roles" bson:"roles"`
-	Token    string   `json:"token" bson:"token"`
+	Takim_no int64    `json:"takim_no" bson:"takim_no"`
 }
 
 var (
 	App          *fiber.App
 	API          fiber.Router
 	SessionStore *session.Store
+	ADMIN        fiber.Router
 )
 
 func init() {
@@ -35,6 +35,7 @@ func init() {
 	})
 	App = fiber.New()
 	API = App.Group("/api")
+	ADMIN = App.Group("/admin")
 	App.Use(
 		cors.New(),
 		logger.New(),
@@ -44,25 +45,68 @@ func init() {
 }
 
 func getSession(c *fiber.Ctx) error {
+	var userDoc UserData
 	sess, err := SessionStore.Get(c)
 	if err != nil {
 		log.Println(err)
 	}
-	/* var userDoc FormT */
-	token := sess.Get("takim_no")
+	/* var userDoc UserData */
+	token := sess.Get("takim")
 	if len(strings.Split(c.Path(), "swagger")) > 1 {
+		return c.Next()
+	}
+	if c.Path() == "/api/giris" && c.Method() == "POST" {
 		return c.Next()
 	}
 	if c.Path() == "/api/giris" && token == nil {
 		return c.Next()
 	} else if c.Path() == "/api/giris" && token != nil {
+		if err := json.Unmarshal([]byte(token.(string)), &userDoc); err != nil {
+			log.Println("parseError: " + err.Error())
+			return c.Status(500).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
+		out, _ := json.Marshal(userDoc)
+		sess.Set("takim", string(out))
+		if err := sess.Save(); err != nil {
+			log.Println(err.Error())
+			return c.Status(500).JSON(fiber.Map{
+				"message": err.Error(),
+			})
+		}
 		return c.JSON(fiber.Map{
-			"takim_no": token.(int64),
+			"takim_no": userDoc.Takim_no,
 		})
 	}
 	if token == nil {
 		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
 			"message": "Unauthorized",
+		})
+	}
+	if err := json.Unmarshal([]byte(token.(string)), &userDoc); err != nil {
+		log.Println("parseError: " + err.Error())
+		return c.Status(500).JSON(fiber.Map{
+			"message": err.Error(),
+		})
+	}
+	options := AuthObject{
+		Username: userDoc.Username,
+		Password: userDoc.Password,
+	}
+	user, err := GetUserData(c, options)
+	if err != nil {
+		log.Println("getUserDataError: " + err.Error())
+		return c.Status(500).JSON(fiber.Map{
+			"message": "no user found with these credentials",
+		})
+	}
+	out, _ := json.Marshal(user)
+	sess.Set("takim", string(out))
+	if err := sess.Save(); err != nil {
+		log.Println(err.Error())
+		return c.Status(500).JSON(fiber.Map{
+			"message": err.Error(),
 		})
 	}
 	/* userDocx := sess.Get("userDoc")
@@ -100,6 +144,23 @@ func getSession(c *fiber.Ctx) error {
 	return c.Next()
 }
 
+type AuthObject struct {
+	Username string `json:"kadi" bson:"kadi"`
+	Password string `json:"sifre" bson:"sifre"`
+}
+
+func GetUserData(ctx *fiber.Ctx, options AuthObject) (UserData, error) {
+	var userDoc UserData
+	if err := UserCollection.FindOne(ctx.Context(), bson.D{
+		{Key: "kadi", Value: options.Username},
+		{Key: "sifre", Value: options.Password},
+	}).Decode(&userDoc); err != nil {
+		return userDoc, err
+	} else {
+		return userDoc, nil
+	}
+}
+
 /* func isAuthorized(c *fiber.Ctx) error {
 	sess, err := SessionStore.Get(c)
 	if err != nil {
@@ -114,9 +175,9 @@ func getSession(c *fiber.Ctx) error {
 	return c.Next()
 }
 */
-
-func GetAuthDocumentByToken(token string) (FormT, error) {
-	var auth FormT
+/*
+func GetAuthDocumentByToken(token string) (UserData, error) {
+	var auth UserData
 	log.Println("App | GetAuthDocumentByToken | token: " + token + "")
 	result := Redis.Get(auth.Token)
 	if len(result) > 0 {
@@ -133,4 +194,4 @@ func GetAuthDocumentByToken(token string) (FormT, error) {
 		return auth, err
 	}
 	return auth, nil
-}
+} */

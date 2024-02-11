@@ -5,9 +5,7 @@ import (
 )
 
 var (
-	username = "kadi"
-	password = "sifre"
-	takim_no int64
+	UserData server.UserData
 )
 
 func init() {

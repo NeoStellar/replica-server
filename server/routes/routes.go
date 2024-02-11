@@ -2,6 +2,7 @@ package routes
 
 import (
 	"iharacee/server"
+	_ "iharacee/server/routes/admin/users"
 	_ "iharacee/server/routes/api/giris"
 	_ "iharacee/server/routes/api/kamikaze_bilgisi"
 	_ "iharacee/server/routes/api/kilitlenme_bilgisi"

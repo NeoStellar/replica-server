@@ -1,9 +1,9 @@
 package giris
 
 import (
+	"encoding/json"
 	"iharacee/server"
 	"log"
-	"strconv"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -29,7 +29,7 @@ type girisResult500 struct {
 //	@Failure      500  {object} girisResult500
 //	@Router       /api/giris [post]
 func signSessionUser(ctx *fiber.Ctx) error {
-	var requestBody AuthObject
+	var requestBody server.AuthObject
 	sess, err := server.SessionStore.Get(ctx)
 	if err != nil {
 		log.Println(err)
@@ -43,11 +43,16 @@ func signSessionUser(ctx *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	if requestBody.Password != password || requestBody.Username != username {
-		return ctx.SendStatus(400)
+	userDoc, err := server.GetUserData(ctx, requestBody)
+	if err != nil {
+		log.Println("getUserDataError: " + err.Error())
+		return ctx.Status(500).JSON(fiber.Map{
+			"error": "no user found with these credentials",
+		})
 	}
-	takim_no = countTeams()
-	sess.Set("takim_no", takim_no)
+	//takim_no = countTeams()
+	out, _ := json.Marshal(userDoc)
+	sess.Set("takim", string(out))
 	if err := sess.Save(); err != nil {
 		log.Println(err.Error())
 		return ctx.Status(500).JSON(fiber.Map{
@@ -55,13 +60,13 @@ func signSessionUser(ctx *fiber.Ctx) error {
 		})
 	}
 	return ctx.Status(200).JSON(fiber.Map{
-		"takim_no": takim_no,
+		"takim_no": userDoc.Takim_no,
 	})
 }
 
-func countTeams() int64 {
+/* func countTeams() int64 {
 	redisString := server.Redis.Get("takim_sayisi")
 	i, _ := strconv.Atoi(redisString)
 	server.Redis.Set("takim_sayisi", strconv.Itoa(i+1))
 	return int64(i + 1)
-}
+} */
