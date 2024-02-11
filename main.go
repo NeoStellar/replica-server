@@ -18,8 +18,8 @@ import (
 // @contact.email fiber@swagger.io
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host replica.neostellar.net
-// @schemes http https
+// @host 127.0.0.1:9080
+// @schemes http
 // @BasePath /
 func main() {
 
