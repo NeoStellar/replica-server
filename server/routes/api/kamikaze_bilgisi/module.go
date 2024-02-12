@@ -6,7 +6,7 @@ import (
 
 func init() {
 	app := server.API
-	router := app.Group("/kilitlenme_bilgisi")
+	router := app.Group("/kamikaze_bilgisi")
 	router.Post("/", sendLockInfo)
 }
 
