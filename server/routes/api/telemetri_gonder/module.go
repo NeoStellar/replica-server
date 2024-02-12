@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	telemetryCollection = server.Mongo.Collection("telemetri_gonder")
+	telemetryCollection = server.Mongo.Collection("api.telemetri_gonder")
 	redis               server.RedisInstance
 )
 

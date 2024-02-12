@@ -44,10 +44,8 @@ func sendLockInfo(ctx *fiber.Ctx) error {
 	}
 	// Note the method has pointer receiver, so use a pointer to your value:
 	kamikazeDataDocument := &LockInfoDocument{
-		LockStartTime:  LockData.LockStartTime,
-		LockEndTime:    LockData.LockEndTime,
-		AutonomousLock: LockData.AutonomousLock,
-		TeamNumber:     takimData.Takim_no,
+		Data:       LockData,
+		TeamNumber: takimData.Takim_no,
 	}
 	if _, err := kilitlenmeCollection.InsertOne(ctx.Context(), kamikazeDataDocument); err != nil {
 		return ctx.Status(500).JSON(fiber.Map{

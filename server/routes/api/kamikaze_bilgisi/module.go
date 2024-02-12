@@ -8,7 +8,7 @@ import (
 )
 
 var (
-	kamikazeCollection = server.Mongo.Collection("kamikaze_bilgisi")
+	kamikazeCollection = server.Mongo.Collection("api.kamikaze_bilgisi")
 )
 
 func init() {
@@ -31,12 +31,10 @@ type KamikazeData struct {
 }
 
 type KamikazeDataDocument struct {
-	ID                string     `json:"id,omitempty" bson:"_id,omitempty"`
-	KamikazeStartTime Servertime `json:"kamikazeBaslangicZamani" bson:"kamikazeBaslangicZamani"`
-	KamikazeEndTime   Servertime `json:"kamikaBitisZamani" bson:"kamikaBitisZamani"`
-	QrText            string     `json:"qrMetni" bson:"qrMetni"`
-	TeamNumber        int64      `json:"takim_no" bson:"takim_no"`
-	CreatedAt         time.Time  `json:"created_at" bson:"created_at"`
+	ID         string       `json:"id,omitempty" bson:"_id,omitempty"`
+	Data       KamikazeData `json:"data" bson:"data"`
+	TeamNumber int64        `json:"takim_no" bson:"takim_no"`
+	CreatedAt  time.Time    `json:"created_at" bson:"created_at"`
 }
 
 func (u *KamikazeDataDocument) MarshalBSON() ([]byte, error) {
