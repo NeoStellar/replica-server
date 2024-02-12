@@ -3,10 +3,14 @@ package telemetri_gonder
 import (
 	"iharacee/server"
 	"iharacee/server/routes/api/sunucusaati"
+	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 var (
-	redis server.RedisInstance
+	telemetryCollection = server.Mongo.Collection("telemetri_gonder")
+	redis               server.RedisInstance
 )
 
 func init() {
@@ -43,4 +47,19 @@ type TelemetryData struct {
 type TelemetryDataResponse struct {
 	Sunucusaati    sunucusaati.ServerTime `json:"sunucusaati" bson:"sunucusaati"`
 	KonumBilgileri []TelemetryData        `json:"konumBilgileri" bson:"konumBilgileri"`
+}
+
+type TelemetryDataDocument struct {
+	ID         string        `json:"id,omitempty" bson:"_id,omitempty"`
+	Data       TelemetryData `json:"data" bson:"data"`
+	TeamNumber int64         `json:"takim_no" bson:"takim_no"`
+	CreatedAt  time.Time     `json:"created_at" bson:"created_at"`
+}
+
+func (u *TelemetryDataDocument) MarshalBSON() ([]byte, error) {
+	if u.CreatedAt.IsZero() {
+		u.CreatedAt = time.Now()
+	}
+	type my TelemetryDataDocument
+	return bson.Marshal((*my)(u))
 }

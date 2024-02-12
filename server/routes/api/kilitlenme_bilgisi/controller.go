@@ -7,8 +7,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-var kamikazeCollection = server.Mongo.Collection("kilitlenme_bilgisi")
-
 // /api/kilitlenme_bilgisi
 //
 //	@Summary      	Kilitlenme Bilgisi Gönderir
@@ -51,7 +49,7 @@ func sendLockInfo(ctx *fiber.Ctx) error {
 		AutonomousLock: LockData.AutonomousLock,
 		TeamNumber:     takimData.Takim_no,
 	}
-	if _, err := kamikazeCollection.InsertOne(ctx.Context(), kamikazeDataDocument); err != nil {
+	if _, err := kilitlenmeCollection.InsertOne(ctx.Context(), kamikazeDataDocument); err != nil {
 		return ctx.Status(500).JSON(fiber.Map{
 			"error": "Kamikaze verisi kaydedilemedi",
 		})

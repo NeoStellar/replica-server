@@ -7,6 +7,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
+var kilitlenmeCollection = server.Mongo.Collection("kilitlenme_bilgisi")
+
 func init() {
 	app := server.API
 	router := app.Group("/kilitlenme_bilgisi")

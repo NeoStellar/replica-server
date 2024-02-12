@@ -40,6 +40,15 @@ func SendTelemetryData(ctx *fiber.Ctx) error {
 	if requestBody.Takim_numarasi != takim_no {
 		return ctx.SendStatus(400)
 	}
+	telemetryDocument := &TelemetryDataDocument{
+		Data:       requestBody,
+		TeamNumber: takim_no,
+	}
+	if _, err := telemetryCollection.InsertOne(ctx.Context(), telemetryDocument); err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"error": "Telemetri verisi kaydedilemedi",
+		})
+	}
 	response := TelemetryDataResponse{
 		Sunucusaati:    sunucusaati.GetServerTime(),
 		KonumBilgileri: PushTelemetryData(requestBody),
