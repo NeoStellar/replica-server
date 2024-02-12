@@ -39,7 +39,6 @@ type KamikazeDataDocument struct {
 	CreatedAt         time.Time  `json:"created_at" bson:"created_at"`
 }
 
-// source https://stackoverflow.com/questions/71902455/autofill-created-at-and-updated-at-in-golang-struct-while-pushing-into-mongodb
 func (u *KamikazeDataDocument) MarshalBSON() ([]byte, error) {
 	if u.CreatedAt.IsZero() {
 		u.CreatedAt = time.Now()

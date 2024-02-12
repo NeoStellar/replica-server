@@ -1,8 +1,13 @@
 package kilitlenme_bilgisi
 
 import (
+	"encoding/json"
+	"iharacee/server"
+
 	"github.com/gofiber/fiber/v2"
 )
+
+var kamikazeCollection = server.Mongo.Collection("kilitlenme_bilgisi")
 
 // /api/kilitlenme_bilgisi
 //
@@ -14,6 +19,42 @@ import (
 //	@Produce      	json
 //	@Success      	200
 //	@Router       	/api/kilitlenme_bilgisi [post]
-func sendLockInfo(c *fiber.Ctx) error {
-	return c.SendStatus(200)
+func sendLockInfo(ctx *fiber.Ctx) error {
+	var LockData LockInfo
+	if err := ctx.BodyParser(&LockData); err != nil {
+		return ctx.Status(400).JSON(fiber.Map{
+			"error": "Kamikaze verisi alınamadı",
+		})
+	}
+	session, err := server.SessionStore.Get(ctx)
+	if err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"error": "Session alınamadı",
+		})
+	}
+	takim := session.Get("takim")
+	if takim == nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"error": "Takım alınamadı",
+		})
+	}
+	var takimData server.UserData
+	if err := json.Unmarshal([]byte(takim.(string)), &takimData); err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"message": "parseError: " + err.Error(),
+		})
+	}
+	// Note the method has pointer receiver, so use a pointer to your value:
+	kamikazeDataDocument := &LockInfoDocument{
+		LockStartTime:  LockData.LockStartTime,
+		LockEndTime:    LockData.LockEndTime,
+		AutonomousLock: LockData.AutonomousLock,
+		TeamNumber:     takimData.Takim_no,
+	}
+	if _, err := kamikazeCollection.InsertOne(ctx.Context(), kamikazeDataDocument); err != nil {
+		return ctx.Status(500).JSON(fiber.Map{
+			"error": "Kamikaze verisi kaydedilemedi",
+		})
+	}
+	return ctx.SendStatus(200)
 }
