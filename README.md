@@ -1,5 +1,5 @@
 # replica-server
-
+[teknofest savaşan iha haberleşme API'si](https://cdn.teknofest.org/media/upload/userFormUpload/Savasan_IHA_Haberlesme_Dokumani_v6_Sxf7C.pdf) kopyası.
 .env example
 
 ```t
